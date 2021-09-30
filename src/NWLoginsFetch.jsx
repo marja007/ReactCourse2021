@@ -53,7 +53,11 @@ class NWLoginsFetch extends Component{
 
     //tämä on funktio
     handleChangeLastname(){
- 
+        if(this.arvo.value==="")
+        {
+            this.setState({lastname: ""}, this.componentDidMount)
+        }
+        else{
         //Tässä sijoitettan arvo-olioon eventillä vastaanotettu value
         var arvot=[...this.state.arvot]
         arvot.push(this.arvo.value)
@@ -61,18 +65,23 @@ class NWLoginsFetch extends Component{
         //kun staten päivitys on tehty kutsutaan componentDidMounttia, jotta se tulee voimaan heti
         //console.log(arvot + " handlessa")
         this.setState({lastname: arvot},this.componentDidMount)  
+       
+        }
+
       }
 
     
     haeNWRestApista()
         {  
             if(this.state.lastname !==""){
+                
                 fetch('https://localhost:5001/nw/logins/'+this.state.lastname)
                 .then(resp => resp.json())
                 .then(oliot => this.setState({logins: oliot}))
             }
             else{
-                fetch('https://localhost:5001/nw/logins')
+                fetch('https://localhost:5001/nw/logins/r?offset=' + this.state.start + '&limit=' + this.state.take)
+                //fetch('https://localhost:5001/nw/logins')
                 .then(resp => resp.json())
                 .then(oliot => this.setState({logins: oliot}))
             }
@@ -80,18 +89,19 @@ class NWLoginsFetch extends Component{
 
         render(){
             const{logins}=this.state
-            if(logins.length >0)
+            if(logins.length >9)
             {
                 if(this.state.visible === "table"){
                 //console.log("State on:  ", this.state.logins)
                 return(
                     <div className="box1">
                         <h2>Käyttäjät</h2>
+                        <p>Näytetään {logins.length} käyttäjää</p>
                         {/* <p>{this.state.customers[70].title}</p> */}
                         <button onClick={this.handleClickPrev}>Edelliset</button>
                         <button onClick={this.handleClickNext}>Seuraavat</button>
                         <button onClick={this.handleClickNEW}>Uusi käyttäjä</button>
-                        <button onClick={this.handleClickHelp}>Helpppi</button>
+                        <button onClick={this.handleClickHelp}>Helppi</button>
                         <button onClick={this.handeleClickShowAll}>Tyhjennä haku</button>
                        
                         <button onClick={this.handleChangeLastname.bind(this)}>Hae sukunimellä</button>
@@ -145,6 +155,71 @@ class NWLoginsFetch extends Component{
                 )
             }
         }
+        else if(logins.length >0 && logins.length<10){
+            if(this.state.visible === "table"){
+            //console.log("State on:  ", this.state.logins)
+            return(
+                <div className="box1">
+                    <h2>Käyttäjät</h2>
+                    <p>Näytetään {logins.length} käyttäjää</p>
+                    {/* <p>{this.state.customers[70].title}</p> */}
+                    <button onClick={this.handleClickPrev}>Hae edelliset käyttäjät</button>
+                    <button disabled="true">Hae seuraavat käyttäjät</button>
+                    <button onClick={this.handleClickNEW}>Uusi käyttäjä</button>
+                    <button onClick={this.handleClickHelp}>Helppi</button>
+                    <button onClick={this.handeleClickShowAll}>Tyhjennä haku</button>
+                   
+                    <button onClick={this.handleChangeLastname.bind(this)}>Hae sukunimellä</button>
+                    <input type="text" placeholder="Limit with lastname" title="Anna sukunimi" ref={(x)=>{this.arvo=x}}/>
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>Etunimi</th>
+                            <th>Sukunimi</th>
+                            <th>AcceslevelID</th>
+                            <th>e-mail</th>
+                            <th>Käyttäjätunnus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* käy läpi jokaisen logins elementin ja aliaisoi sen annetulle elementille (t) */}
+                            {logins.map(t=>(
+                                <tr key={t.loginid}>
+                                    <td>{t.firstname}</td>
+                                    <td>{t.lastname}</td>
+                                    <td>{t.acceslevelid}</td>
+                                    <td>{t.email}</td>
+                                    <td>{t.username}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
+        else if(this.state.visible === "addform"){
+            return(<div className="box2"><h2>Addmoduuli</h2>
+            <button onClick={this.handleClickHelp}>Opaste</button>
+            <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+            {this.state.renderChild ?<NWLoginAdd unmountMe={this.handleChildUnmount}/>: null}
+            </div>
+
+            )
+        }
+        else if(this.state.visible === "help")
+        {
+            return(<div className="box3"><h2>Helppimoduuli</h2>
+            <button onClick={this.handleClickNEW}>Lisää uusi käyttäjä</button>
+            <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+            <Helpit moduli="NWLoginsFetch"/>
+            </div>);
+        }
+        else{
+            return(
+                <div>Jokin meni pieleen...</div>
+            )
+        }
+    }
             else
             {
                 return(
