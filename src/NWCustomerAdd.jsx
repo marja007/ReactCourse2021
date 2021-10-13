@@ -58,9 +58,13 @@ class NWCustomerAdd extends Component{
 
         console.log("asiakasJSON= "+ asiakasJSON)
         const apiUrl = 'https://localhost:5001/nw/customer'
+
+        let jwtoken = localStorage.getItem("token")
+
         fetch(apiUrl,{
             method:"POST",
             headers: {
+                Authorization: "Bearer "+ jwtoken,
                 "Accept":"application/json",
                 "Content-Type": "application/json"
             },
@@ -81,13 +85,18 @@ class NWCustomerAdd extends Component{
             
           <form className="box3" onSubmit={this.handleSubmit}>
               <br/>
+              <header>CustomerID</header>
               <input type="text" title="Syötä asiakastunnus" placeholder="CustomerID"  onChange={this.handleChangeCustomerID}/>
+              <header>Company name</header>
               <input type="text" title="Comapanyname" placeholder="CompanyName" onChange={this.handleChangeCompanyName}/>
+              <header>Contact name</header>
               <input type="text" title="ContactName" placeholder="ContactName"  onChange={this.handleChangeContactName}/>
+              <header>Address</header>
               <input type="text" title="Address" placeholder="Address"  onChange={this.handleChangeAddress}/>
+              <header>Phone</header>
               <input type="text" title="Phone" placeholder="Phone"  onChange={this.handleChangePhone}/>
-              <br/>
-              <button type="submit">Tallenna uudet tiedot</button>
+              <br/> <br/>
+              <button className="btn btn-success" type="submit">Tallenna uudet tiedot</button>
           </form>
         );
        

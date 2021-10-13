@@ -47,14 +47,15 @@
   margin: 20px;
 }
 .Ana{
-  width: 300px;
+  width: 100%;
   background-color: violet;
   color: black;
+  text-align: center;
 }
 .Viestit-h2{
   background-color: #3e75e4;
   min-height: 10vh;
-  max-width: 50vh;
+  max-width: 90%;
   padding-right:5%;
   padding-left: 5%;
   display: flex;
@@ -67,7 +68,7 @@
 .digitaalikello{
   background-color: #0fb0c5;
   min-height: 10vh;
-  max-width: 50vh;
+  max-width: 90% fit-content;
   padding-right:5%;
   padding-left: 5%;
   display: flex;
@@ -80,22 +81,22 @@
 
 .box1{
   background-color: aqua;
-  width: 800px;
-  height: 800px;
-  float: left;
+  width: 100%;
+  height: 100%;
+  float: right;
 }
 
 .box2{
   background-color: coral;
-  width: 300px;
-  height: 450px;
+  width: 100%;
+  height: 100%;
   float: left;
 }
 
 .box3{
   background-color: goldenrod;
-  width: 300px;
-  height: 450px;
+  width: 50%;
+  height: 100%;
   float: left;
 }
 
@@ -107,3 +108,5 @@
     transform: rotate(360deg);
   }
 }
+
+

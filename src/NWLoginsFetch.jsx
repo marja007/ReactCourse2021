@@ -2,6 +2,9 @@ import {Component} from "react";
 import './App.css';
 import Helpit from "./Helpit";
 import NWLoginAdd from "./NWLoginAdd";
+import NWLoginDelete from "./NWLoginDelete";
+import NWLoginsEdit from "./NWLoginsEdit";
+import NWLoginDetails from "./NWLoginDetails";
 
 class NWLoginsFetch extends Component{
     constructor(props){
@@ -12,10 +15,37 @@ class NWLoginsFetch extends Component{
             take: 10,
             lastname:"",
             arvot:[],
-            visible:"table"
+            visible:"table",
+            yksiLoggari: {},
+            poistettavaLoggari: {}
         }
         this.handleChangeLastname=this.handleChangeLastname.bind(this);
         this.handleChildUnmount=this.handleChildUnmount.bind(this)
+        this.handleClickEdit =this.handleClickEdit.bind(this)
+        this.handleClickDelete =this.handleClickDelete.bind(this)
+        this.handleClickDetails =this.handleClickDetails.bind(this)
+    }
+    handleClickEdit =(dataObj)=>{
+        this.setState({  
+        yksiLoggari: dataObj,
+        visible: "editform"
+        })
+        console.log("Editoi tätä" + this.state.yksiLoggari)
+    }
+    handleClickDetails =(dataObj)=>{
+        this.setState({  
+        yksiLoggari: dataObj,
+        visible: "detailsform"
+        })
+        console.log("Katso tätä" + this.state.yksiLoggari)
+    }
+
+    handleClickDelete =(dataObj)=>{
+        this.setState({  
+        poistettavaLoggari: dataObj,
+        visible: "deleteform"
+        })
+        console.log("Poista tämä" + this.state.poistettavaLoggari)
     }
     handleChildUnmount(){
         this.setState({renderChild: false})
@@ -98,8 +128,8 @@ class NWLoginsFetch extends Component{
                         <h2>Käyttäjät</h2>
                         <p>Näytetään {logins.length} käyttäjää</p>
                         {/* <p>{this.state.customers[70].title}</p> */}
-                        <button onClick={this.handleClickPrev}>Edelliset</button>
-                        <button onClick={this.handleClickNext}>Seuraavat</button>
+                        <button disabled={true} onClick={this.handleClickPrev}>Edelliset</button>
+                        <button className="btn btn-success" onClick={this.handleClickNext}>Seuraavat</button>
                         <button onClick={this.handleClickNEW}>Uusi käyttäjä</button>
                         <button onClick={this.handleClickHelp}>Helppi</button>
                         <button onClick={this.handeleClickShowAll}>Tyhjennä haku</button>
@@ -122,9 +152,12 @@ class NWLoginsFetch extends Component{
                                     <tr key={t.loginid}>
                                         <td>{t.firstname}</td>
                                         <td>{t.lastname}</td>
-                                        <td>{t.acceslevelid}</td>
+                                        <td>{t.acceslevelID}</td>
                                         <td>{t.email}</td>
-                                        <td>{t.username}</td>
+                                        <td>{t.userName}</td>
+                                        <td><button onClick={()=>this.handleClickEdit(t)}>Muokkaa</button></td>
+                                        <td><button className="btn-danger" onClick={()=>this.handleClickDelete(t)}>Poista</button></td>
+                                        <td><button onClick={()=>this.handleClickDetails(t)}>Tiedot</button></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -149,6 +182,36 @@ class NWLoginsFetch extends Component{
                 <Helpit moduli="NWLoginsFetch"/>
                 </div>);
             }
+            else if(this.state.visible==="deleteform"){
+                return(<div className="box1">
+                <h1>Käyttäjän poisto</h1>
+                <div>
+                    <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                    <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+                </div>
+                <NWLoginDelete asiakasObj={this.state.poistettavaLoggari} unmountMe={this.handleChildUnmount}/>
+            </div>)
+            }
+            else if(this.state.visible==="editform"){
+                return(<div className="box1">
+                    <h1>Käyttäjätietojen muokkaus</h1>
+                    <div>
+                        <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                        <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+                    </div>
+                    <NWLoginsEdit asiakasObj={this.state.yksiLoggari} unmountMe={this.handleChildUnmount}/>
+                </div>)
+            }
+            else if(this.state.visible==="detailsform"){
+                return(<div className="box1">
+                    <h1>Käyttäjätietojen katselu</h1>
+                    <div>
+                        <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                        <button onClick={this.handeleClickTable}>Selaa asiakkaita</button>
+                    </div>
+                    <NWLoginDetails asiakasObj={this.state.yksiLoggari} unmountMe={this.handleChildUnmount}/>
+                </div>)
+            }
             else{
                 return(
                     <div>Jokin meni pieleen...</div>
@@ -163,7 +226,7 @@ class NWLoginsFetch extends Component{
                     <h2>Käyttäjät</h2>
                     <p>Näytetään {logins.length} käyttäjää</p>
                     {/* <p>{this.state.customers[70].title}</p> */}
-                    <button onClick={this.handleClickPrev}>Hae edelliset käyttäjät</button>
+                    <button className="btn btn-success" onClick={this.handleClickPrev}>Hae edelliset käyttäjät</button>
                     <button disabled="true">Hae seuraavat käyttäjät</button>
                     <button onClick={this.handleClickNEW}>Uusi käyttäjä</button>
                     <button onClick={this.handleClickHelp}>Helppi</button>
@@ -190,6 +253,9 @@ class NWLoginsFetch extends Component{
                                     <td>{t.acceslevelid}</td>
                                     <td>{t.email}</td>
                                     <td>{t.username}</td>
+                                    <td><button onClick={()=>this.handleClickEdit(t)}>Muokkaa</button></td>
+                                    <td><button className="btn-danger" onClick={()=>this.handleClickDelete(t)}>Poista</button></td>
+                                    <td><button onClick={()=>this.handleClickDetails(t)}>Tiedot</button></td>
                                 </tr>
                             ))}
                         </tbody>
@@ -213,6 +279,36 @@ class NWLoginsFetch extends Component{
             <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
             <Helpit moduli="NWLoginsFetch"/>
             </div>);
+        }
+        else if(this.state.visible==="deleteform"){
+            return(<div className="box1">
+            <h1>Käyttäjän poisto</h1>
+            <div>
+                <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+            </div>
+            <NWLoginDelete asiakasObj={this.state.poistettavaLoggari} unmountMe={this.handleChildUnmount}/>
+        </div>)
+        }
+        else if(this.state.visible==="editform"){
+            return(<div className="box1">
+                <h1>Käyttäjätietojen muokkaus</h1>
+                <div>
+                    <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                    <button onClick={this.handeleClickTable}>Selaa käyttäjiä</button>
+                </div>
+                <NWLoginsEdit asiakasObj={this.state.yksiLoggari} unmountMe={this.handleChildUnmount}/>
+            </div>)
+        }
+        else if(this.state.visible==="detailsform"){
+            return(<div className="box1">
+                <h1>Käyttäjätietojen katselu</h1>
+                <div>
+                    <button onClick={this.handleClickHelp}>Näytä helppi</button>
+                    <button onClick={this.handeleClickTable}>Selaa asiakkaita</button>
+                </div>
+                <NWLoginDetails asiakasObj={this.state.yksiLoggari} unmountMe={this.handleChildUnmount}/>
+            </div>)
         }
         else{
             return(

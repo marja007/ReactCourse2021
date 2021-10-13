@@ -72,13 +72,17 @@ class Digikello extends Component
       <div className="digitaalikello">
         <p>Kellonaika: {this.state.time}</p>
         <p>Päivämäärä: {this.state.date}</p>
+        <div>
         {/* tässä välitetään komponentille propsi ja sille data */}
         <Kello kellonaika={this.state.time}/>
-        <p className="Ana">Tässä on analogikello
+        </div>
+        <p className="Ana">Tässä on analogikello</p>
         {/* Javascriptin spreadsyntaksi on ... tuo kaikki olion tiedot*/}
-        <AnalogClock {...opt} value={this.state.pvm}/></p>
+        <div>
+        <AnalogClock {...opt} value={this.state.pvm}/>
+        </div>
         {/* Javascriptin spreadsyntaksi on ... tuo kaikki olion tiedot*/}
-        <p> <AnalogClock {...mergedOpt} value={this.state.pvm}/></p>
+        <div> <AnalogClock {...mergedOpt} value={this.state.pvm}/></div>
       </div>
 
     );

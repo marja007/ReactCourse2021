@@ -5,12 +5,13 @@ import './App.css';
 class NWLoginAdd extends Component{
     constructor(props){
         super(props);
-        this.state={Firstname:"", Lastname:"", Email:"", Username:"", Password:"", AcceslevelID:0}
+        this.state={Firstname:"", Lastname:"", Email:"", Username:"", Password:"",Password2:"",Match:"", AcceslevelID:0}
         this.handleChangeFirstname=this.handleChangeFirstname.bind(this)
         this.handleChangeLastname=this.handleChangeLastname.bind(this)
         this.handleChangeEmail=this.handleChangeEmail.bind(this)
         this.handleChangeUsername=this.handleChangeUsername.bind(this)
         this.handleChangePassword=this.handleChangePassword.bind(this)
+        this.handleconfirmPassword=this.handleconfirmPassword.bind(this)
         this.handleChangeAcceslevelID=this.handleChangeAcceslevelID.bind(this)
         this.handleSubmit=this.handleSubmit.bind(this)
     }
@@ -41,7 +42,18 @@ class NWLoginAdd extends Component{
         this.setState({...this.state, Password: salattu});
         //console.log(input + " "+ salattu)
     }
+    handleconfirmPassword(event){
+        var input=event.target.value
+        var salasana2=md5(input)
+        this.setState({...this.state, Password2: salasana2})
+        if(this.state.Password !== salasana2){
+        this.setState({Match: "salasanat eivät täsmää"});
+        }
+        else{
+            this.setState({Match: "Nyt täsmää"})
+        }
 
+    }
     handleChangeAcceslevelID(event){
         var input=event.target.value;
         this.setState({...this.state, AcceslevelID: parseInt(input)});
@@ -49,9 +61,16 @@ class NWLoginAdd extends Component{
     }
 
     handleSubmit(event){
-        alert("Lähetettiin käyttäjä "+ this.state.Firstname)
         event.preventDefault();
-        this.Insertoikantaan();
+        if(this.state.Password===this.state.Password2)
+        {
+            alert("Lähetettiin käyttäjä "+ this.state.Firstname)
+            this.Insertoikantaan();
+        }
+        else{
+            alert("salasanakentät eivät täsmää")
+        }
+
     }
 
     Insertoikantaan(){
@@ -97,9 +116,11 @@ class NWLoginAdd extends Component{
               <input type="text" title="Email" placeholder="Email"  onChange={this.handleChangeEmail}/>
               <input type="text" title="Username" placeholder="Username"  onChange={this.handleChangeUsername}/>
               <input type="password" title="Password" placeholder="Password"  onChange={this.handleChangePassword}/>
+              <input type="password" title="Password" placeholder="Confirm Password"  onChange={this.handleconfirmPassword}/>
               <input type="number" title="AcceslevelID" placeholder="AcceslevelID"  onChange={this.handleChangeAcceslevelID}/>
               <br/>
               <button type="submit">Tallenna uudet tiedot</button>
+              <p>{this.state.Match}</p>
           </form>
         );
        

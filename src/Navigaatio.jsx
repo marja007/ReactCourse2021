@@ -6,7 +6,9 @@ import Viestit from "./Viestit";
 import {Component} from 'react';
 import './index.css';
 import NWLoginsFetch from "./NWLoginsFetch";
-import MD5demo from "./MD5demo"
+import MD5demo from "./MD5demo";
+import NWProductsFetch from "./NWProductsFetch";
+import LoginKomponentti from "./LoginKomponentti";
 
 class Navigaatio extends Component{
     render(){
@@ -14,14 +16,17 @@ class Navigaatio extends Component{
             <Router>
                 <div>
                     <h2>Eka React App-Typicodea ja Northwindiä</h2>
+                    <><LoginKomponentti/></>
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                         <ul className="navbar-nav mr-auto">
                             <li><Link to={'/'} className="nav-link">Home</Link></li>
-                            <li><Link to={'/NWCustomerFetch'} className="nav-link" >NWCustomerFetch</Link></li>
+                            <li><Link to={{ pathname:'/NWCustomerFetch', state: {message:"Moikkuli"}}} className="nav-link" >NWCustomerFetch</Link></li>
                             <li><Link to={'/TypicodeFetch'} className="nav-link">TypicodeFetch</Link></li>
                             <li><Link to={'/Viestit'} className="nav-link">Viestit</Link></li>
                             <li><Link to={'/NWLoginsFetch'} className="nav-link">NWLoginsFetch</Link></li>
                             <li><Link to={'/MD5demo'} className="nav-link">MD5demo</Link></li>
+                            <li><Link to={'/NWProductsFetch'} className="nav-link">NWProductsFetch</Link></li>
+                            <li><Link to={{ pathname:'/NWCustomerFetch', state: {message:"uusiAsiakas"}}}className="nav-link">NWPCustomerFetchAdd</Link></li>
                         </ul>
                     </nav>
                     <hr/>
@@ -32,6 +37,8 @@ class Navigaatio extends Component{
                         <Route path='/Viestit' component={Viestit}/>
                         <Route path='/NWLoginsFetch' component={NWLoginsFetch}/>
                         <Route path='/MD5demo' component={MD5demo}/>
+                        <Route path='/NWProductsFetch' component={NWProductsFetch}/>
+                        <Route path='/NWCustomerFetch' component={NWCustomerFetch}/>
                     </Switch>
                 </div>
             </Router>

@@ -11,6 +11,9 @@ class Helpit extends Component{
         else if(this.props.moduli==="NWLoginsFetch"){
             return(<div><p>Voit hakea käyttäjiä ja muokata niiden perustietoja</p></div>)
         }
+        else if(this.props.moduli==="NWProductsFetch"){
+            return(<div><p>Voit hakea tuotteita ja muokata niiden perustietoja</p></div>)
+        }
         else{
             return(<div><p>Helppiä ei löydy</p></div>)
         }
